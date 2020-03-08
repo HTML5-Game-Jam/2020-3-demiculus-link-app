@@ -88,6 +88,7 @@ class App extends Component {
           <div className='App-header'>
             <img src={logo} className='App-logo' alt='logo' />
             <h1 className='App-intro'>Gemmer</h1>
+            <p>A social bookmarking experience, with a time-backed currency twist.</p>
           </div>
         </div>
         <Container>
