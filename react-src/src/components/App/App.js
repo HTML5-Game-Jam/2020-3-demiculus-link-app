@@ -7,7 +7,6 @@ import TableUser from '../TableUser/TableUser';
 import ModalUser from '../ModalUser/ModalUser';
 
 import logo from '../../logo.svg';
-import shirts from '../../shirts.png';
 import './App.css';
 
 class App extends Component {
@@ -20,6 +19,7 @@ class App extends Component {
 
     this.state = {
       users: [],
+      links: [],
       online: 0
     }
 
@@ -37,6 +37,10 @@ class App extends Component {
     this.socket.on('add', data => this.handleUserAdded(data));
     this.socket.on('update', data => this.handleUserUpdated(data));
     this.socket.on('delete', data => this.handleUserDeleted(data));
+
+    this.socket.on('add_link', data => this.handleLinkAdded(data));
+    this.socket.on('update_link', data => this.handleLinkUpdated(data));
+    this.socket.on('delete_link', data => this.handleLinkDeleted(data));
   }
 
   // Fetch data from the back-end
@@ -50,11 +54,37 @@ class App extends Component {
     });
   }
 
-  handleUserAdded(user) {
+    handleLinkAdded(link) {
+      let links = this.state.links.slice();
+      links.push(link);
+      this.setState({links: links});
+    }
+
+    handleLinkUpdated(link) {
+        let links = this.state.links.slice();
+        for(let i = 0, n = links.length; i < n; i++) {
+            if(links[i]._id === link._id) {
+                // users[i].name = user.name;
+                // users[i].email = user.email;
+                // users[i].age = user.age;
+                // users[i].gender = user.gender;
+                break;
+            }
+        }
+        this.setState({ links: links });
+    }
+
+    handleLinkDeleted(link) {
+        let links = this.state.links.slice();
+        links = links.filter(l => { return l._id !== links._id; });
+        this.setState({ links: links });
+    }
+
+    handleUserAdded(user) {
     let users = this.state.users.slice();
     users.push(user);
     this.setState({ users: users });
-  }
+    }
 
   handleUserUpdated(user) {
     let users = this.state.users.slice();
