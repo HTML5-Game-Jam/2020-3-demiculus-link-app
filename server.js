@@ -74,7 +74,7 @@ io.on('connection', (socket) => {
 
   socket.on('add_link', data => socket.broadcast.emit('add_link', data));
   socket.on('update_link', data => socket.broadcast.emit('update_link', data));
-  socket.on('delete_link', data => socket.broadcast.emit('delete_link', data));
+  // socket.on('delete_link', data => socket.broadcast.emit('delete_link', data));
 
   socket.on('disconnect', () => {
     online--;

@@ -40,7 +40,7 @@ class App extends Component {
 
     this.socket.on('add_link', data => this.handleLinkAdded(data));
     this.socket.on('update_link', data => this.handleLinkUpdated(data));
-    this.socket.on('delete_link', data => this.handleLinkDeleted(data));
+    // this.socket.on('delete_link', data => this.handleLinkDeleted(data));
   }
 
   // Fetch data from the back-end
