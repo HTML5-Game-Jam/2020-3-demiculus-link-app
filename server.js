@@ -44,6 +44,7 @@ if (process.env.CORS) {
 
 // Initialize routes middleware
 app.use('/api/users', require('./routes/users'));
+app.use('/api/links', require('./routes/links'));
 
 // Use express's default error handling middleware
 app.use((err, req, res, next) => {
