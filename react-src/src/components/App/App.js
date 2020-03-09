@@ -38,6 +38,7 @@ class App extends Component {
   // Place socket.io code inside here
   componentDidMount() {
     this.fetchUsers();
+      this.fetchLinks();
     this.socket.on('visitor enters', data => this.setState({ online: data }));
     this.socket.on('visitor exits', data => this.setState({ online: data }));
     this.socket.on('add', data => this.handleUserAdded(data));
