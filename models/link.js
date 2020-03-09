@@ -12,8 +12,11 @@ const urlValidator = [
         validator: 'isURL',
         message: 'URL must be valid'
     })
-
 ];
+
+const typeValidator = [
+    // TODO: Make some validations here
+]
 
 const tagValidator = [
     // TODO: Make some validations here...
@@ -26,6 +29,10 @@ const LinkSchema = new mongoose.Schema({
         required: [true, 'URL is required.'],
         unique: true,
         validate: urlValidator
+    },
+    type: {
+        type: String,
+        validate: typeValidator
     },
     tag: {
         type: String,
