@@ -5,6 +5,8 @@ import io from 'socket.io-client';
 
 import TableUser from '../TableUser/TableUser';
 import ModalUser from '../ModalUser/ModalUser';
+import TableLink from '../TableLink/TableLink';
+import ModalLink from '../ModalLink/ModalLink';
 
 import logo from '../../logo.svg';
 import './App.css';
@@ -27,6 +29,10 @@ class App extends Component {
     this.handleUserAdded = this.handleUserAdded.bind(this);
     this.handleUserUpdated = this.handleUserUpdated.bind(this);
     this.handleUserDeleted = this.handleUserDeleted.bind(this);
+    this.fetchLinks = this.fetchLinks.bind(this);
+    this.handleLinkAdded = this.handleLinkAdded.bind(this);
+    this.handleLinkUpdated = this.handleLinkUpdated.bind(this);
+      // this.handleUserDeleted = this.handleUserDeleted.bind(this);
   }
 
   // Place socket.io code inside here
@@ -52,6 +58,14 @@ class App extends Component {
     .catch((err) => {
       console.log(err);
     });
+  fetchLinks() {
+    axios.get(`${this.server}/api/links/`)
+        .then((response) => {
+          this.setState({ links: response.data});
+        })
+        .catch((err) => {
+          console.log(err);
+        })
   }
 
     handleLinkAdded(link) {
@@ -64,11 +78,10 @@ class App extends Component {
         let links = this.state.links.slice();
         for(let i = 0, n = links.length; i < n; i++) {
             if(links[i]._id === link._id) {
-                // users[i].name = user.name;
-                // users[i].email = user.email;
-                // users[i].age = user.age;
-                // users[i].gender = user.gender;
-                break;
+              links[i].url = link.url;
+              links[i].type = link.type;
+              links[i].tag = link.tag;
+              break;
             }
         }
         this.setState({ links: links });
@@ -122,20 +135,20 @@ class App extends Component {
           </div>
         </div>
         <Container>
-          <ModalUser
-            headerTitle='Add User'
-            buttonTriggerTitle='Add New'
+          <ModalLink
+            headerTitle='Add Link'
+            buttonTriggerTitle='Add New Link'
             buttonSubmitTitle='Add'
             buttonColor='green'
-            onUserAdded={this.handleUserAdded}
+            onLinkAdded={this.handleLinkAdded}
             server={this.server}
             socket={this.socket}
           />
-          <em id='online'>{`${online} ${noun} ${verb} online.`}</em>
-          <TableUser
-            onUserUpdated={this.handleUserUpdated}
-            onUserDeleted={this.handleUserDeleted}
-            users={this.state.users}
+            <em id='online'>{`${online} ${noun} ${verb} online.`}</em>
+          <TableLink
+            onLinkUpdated={this.handleLinkUpdated}
+            // onLinkDeleted={this.handleLinkDeleted}
+            links={this.state.links}
             server={this.server}
             socket={this.socket}
           />
