@@ -5,6 +5,7 @@ import io from 'socket.io-client';
 
 import TableUser from '../TableUser/TableUser';
 import ModalUser from '../ModalUser/ModalUser';
+
 import TableLink from '../TableLink/TableLink';
 import ModalLink from '../ModalLink/ModalLink';
 
@@ -23,12 +24,13 @@ class App extends Component {
       users: [],
       links: [],
       online: 0
-    }
+    };
 
     this.fetchUsers = this.fetchUsers.bind(this);
     this.handleUserAdded = this.handleUserAdded.bind(this);
     this.handleUserUpdated = this.handleUserUpdated.bind(this);
     this.handleUserDeleted = this.handleUserDeleted.bind(this);
+
     this.fetchLinks = this.fetchLinks.bind(this);
     this.handleLinkAdded = this.handleLinkAdded.bind(this);
     this.handleLinkUpdated = this.handleLinkUpdated.bind(this);
@@ -38,7 +40,7 @@ class App extends Component {
   // Place socket.io code inside here
   componentDidMount() {
     this.fetchUsers();
-      this.fetchLinks();
+    this.fetchLinks();
     this.socket.on('visitor enters', data => this.setState({ online: data }));
     this.socket.on('visitor exits', data => this.setState({ online: data }));
     this.socket.on('add', data => this.handleUserAdded(data));
@@ -51,14 +53,6 @@ class App extends Component {
   }
 
   // Fetch data from the back-end
-  fetchUsers() {
-    axios.get(`${this.server}/api/users/`)
-    .then((response) => {
-      this.setState({ users: response.data });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
   fetchLinks() {
     axios.get(`${this.server}/api/links/`)
         .then((response) => {
@@ -69,9 +63,21 @@ class App extends Component {
         })
   }
 
+
+  fetchUsers() {
+    axios.get(`${this.server}/api/users/`)
+    .then((response) => {
+      this.setState({ users: response.data });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
+
     handleLinkAdded(link) {
       let links = this.state.links.slice();
       links.push(link);
+      console.log(link)
       this.setState({links: links});
     }
 
@@ -88,11 +94,11 @@ class App extends Component {
         this.setState({ links: links });
     }
 
-    handleLinkDeleted(link) {
-        let links = this.state.links.slice();
-        links = links.filter(l => { return l._id !== links._id; });
-        this.setState({ links: links });
-    }
+    // handleLinkDeleted(link) {
+    //     let links = this.state.links.slice();
+    //     links = links.filter(l => { return l._id !== links._id; });
+    //     this.setState({ links: links });
+    // }
 
     handleUserAdded(user) {
     let users = this.state.users.slice();
@@ -135,6 +141,25 @@ class App extends Component {
             <p>A social bookmarking experience, with a time-backed currency twist.</p>
           </div>
         </div>
+        <Container>
+          <ModalUser
+            headerTitle='Add User'
+            buttonTriggerTitle='Add New'
+            buttonSubmitTitle='Add'
+            buttonColor='green'
+            onUserAdded={this.handleUserAdded}
+            server={this.server}
+            socket={this.socket}
+          />
+          <em id='online'>{`${online} ${noun} ${verb} online.`}</em>
+          <TableUser
+            onUserUpdated={this.handleUserUpdated}
+            onUserDeleted={this.handleUserDeleted}
+            users={this.state.users}
+            server={this.server}
+            socket={this.socket}
+          />
+        </Container>
         <Container>
           <ModalLink
             headerTitle='Add Link'
